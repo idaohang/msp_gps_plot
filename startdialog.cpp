@@ -20,6 +20,8 @@ StartDialog::~StartDialog()
 }
 
 void StartDialog::portSelected() {
+    MspComms *com = new MspComms(ui->comboBox->currentText(), this);
+    com->startQueryGPS(1000);
     p.show();
     this->close();
 }

@@ -79,12 +79,12 @@ void MspComms::dataReceived() {
     qDebug() << "Received data:";
     QByteArray data = port->readAll();
 
-#if 1
+#if 0
     for(int i = 0; i < data.length(); i++) {
         if((int)data.at(i) > 31)
-            qDebug() << (uint)data.at(i) << " (" << (char)data.at(i) << ")";
+            qDebug() << (quint8)data.at(i) << " (" << (char)data.at(i) << ")";
         else
-            qDebug() << (uint)data.at(i);
+            qDebug() << (quint8)data.at(i);
     }
 #endif
 
@@ -100,11 +100,11 @@ void MspComms::dataReceived() {
     QByteArray payload = data.mid(5,16);
     bool fix  = (bool)payload.at(0);
     quint8 sats = payload.at(1);
-    qint32 lat  = qFromBigEndian<qint32>((uchar*)payload.mid(2, 4).data());
-    qint32 lon  = qFromBigEndian<qint32>((uchar*)payload.mid(6, 4).data());
-    quint16 alt = qFromBigEndian<quint16>((uchar*)payload.mid(10, 2).data());
-    quint16 spd = qFromBigEndian<quint16>((uchar*)payload.mid(12, 2).data());
-    quint16 hdg = qFromBigEndian<quint16>((uchar*)payload.mid(14,2).data());
+    qint32 lat  = qFromLittleEndian<qint32>((uchar*)payload.mid(2, 4).data());
+    qint32 lon  = qFromLittleEndian<qint32>((uchar*)payload.mid(6, 4).data());
+    quint16 alt = qFromLittleEndian<quint16>((uchar*)payload.mid(10, 2).data());
+    quint16 spd = qFromLittleEndian<quint16>((uchar*)payload.mid(12, 2).data());
+    quint16 hdg = qFromLittleEndian<quint16>((uchar*)payload.mid(14,2).data());
 
     qDebug() << "GPS Fix:  " << fix;
     qDebug() << "GPS Sats: " << sats;
